@@ -49,7 +49,6 @@ export const AccountModal = ({
 }: AccountModalProps) => {
   const [form] = Form.useForm();
   const { accounts, setAccounts } = useContext(Context);
-  console.log('accounts', accounts);
 
   const onValid = () => {
     const formData = form.getFieldsValue() as AccountFormData;
