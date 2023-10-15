@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { Modal, Form, Input, message, Radio, Select, InputNumber } from 'antd';
 
+import { Context } from '../../store/context';
 import { TransactionType } from '../../types';
-import { apiSaveNewTransaction, apiUpdateTransaction, apiGetAccounts } from '../../api';
+import { apiSaveNewTransaction, apiUpdateTransaction } from '../../api';
 
 interface HistoryModalProps {
   isOpenModal: boolean;
@@ -31,7 +32,7 @@ export const HistoryModal = ({
   isIncome = false,
 }: HistoryModalProps) => {
   const [form] = Form.useForm();
-  const [accountsName, setAccountsName] = useState<string[]>([]);
+  const { accounts, transactions, setAccounts, setTransactions } = useContext(Context);
 
   const onValid = () => {
     const formData = form.getFieldsValue() as TransactionFormData;
@@ -43,13 +44,27 @@ export const HistoryModal = ({
     };
 
     if (id) {
-      apiUpdateTransaction(id, data).then(() => {
+      apiUpdateTransaction(id, data).then((newTransactions) => {
+        if (newTransactions) {
+          setTransactions(
+            transactions.map((item) => {
+              if (item.id === id) {
+                return newTransactions;
+              }
+              return item;
+            }),
+          );
+          setAccounts(accounts);
+        }
         message.success('Transaction updated!');
         closeModal();
         form.resetFields();
       });
     } else {
-      apiSaveNewTransaction(data).then(() => {
+      apiSaveNewTransaction(data).then((newTransactions) => {
+        if (newTransactions) {
+          setTransactions([newTransactions, ...transactions]);
+        }
         message.success('Transaction saved!');
         closeModal();
         form.resetFields();
@@ -66,12 +81,6 @@ export const HistoryModal = ({
     closeModal();
   };
 
-  useEffect(() => {
-    apiGetAccounts().then((accounts) => {
-      setAccountsName(accounts.map((item) => item.name));
-    });
-  }, []);
-
   return (
     <Modal
       title={id ? `Edit operation` : `New operation`}
@@ -87,12 +96,12 @@ export const HistoryModal = ({
         <Form.Item
           label="Type"
           name="type"
-          initialValue={isIncome ? 'income' : 'expense'}
+          initialValue={isIncome ? 'income' : 'outcome'}
           rules={[{ required: true }]}
         >
           <Radio.Group>
             <Radio.Button value="income">Income</Radio.Button>
-            <Radio.Button value="expense">Outcome</Radio.Button>
+            <Radio.Button value="outcome">Outcome</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -110,9 +119,9 @@ export const HistoryModal = ({
           rules={[{ required: true }]}
         >
           <Select placeholder="Choose the account">
-            {accountsName.map((item) => (
-              <Select.Option key={item} value={item}>
-                {item}
+            {accounts.map((item) => (
+              <Select.Option key={item.id} value={item.name}>
+                {item.name}
               </Select.Option>
             ))}
           </Select>

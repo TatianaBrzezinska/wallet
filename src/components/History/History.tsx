@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { List } from 'antd';
 
+import { Context } from '../../store/context';
 import { HistoryHeader, HistoryListItem } from '../index';
-import { TransactionsAPI } from '../../types';
 import { apiGetTransactions } from '../../api';
 
 import './History.css';
 
 export const History = () => {
+  const { transactions, setTransactions } = useContext(Context);
   const [isLoading, setLoader] = useState(false);
-  const [transactions, setTransactions] = useState<TransactionsAPI[]>([]);
 
   useEffect(() => {
     setLoader(true);
     apiGetTransactions()
       .then(setTransactions)
       .finally(() => setLoader(false));
+    // eslint-disable-next-line
   }, []);
 
   return (

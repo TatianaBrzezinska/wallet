@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Statistic, Button, Typography, Dropdown, Modal } from 'antd';
 import { EllipsisOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-
+import { Context } from '../../store/context';
 import { AccountModal } from '../index';
 import { apiDeleteAccount } from '../../api';
 
@@ -15,6 +15,7 @@ interface AccountItemProps {
 }
 
 export const AccountItem = ({ id, balance, name, color }: AccountItemProps) => {
+  const { accounts, setAccounts } = useContext(Context);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const menuItems = [
     {
@@ -34,7 +35,9 @@ export const AccountItem = ({ id, balance, name, color }: AccountItemProps) => {
           cancelText: 'Cancel',
           okText: 'Delete',
           onOk() {
-            return apiDeleteAccount(id);
+            return apiDeleteAccount(id).then(() => {
+              setAccounts(accounts.filter((item) => item.id !== id));
+            });
           },
           onCancel() {},
         });

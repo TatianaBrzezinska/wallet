@@ -1,5 +1,7 @@
+import { useContext } from 'react';
 import { Modal, Form, Input, message, ColorPicker, InputNumber } from 'antd';
 import { apiSaveNewAccount, apiUpdateAccount } from '../../api';
+import { Context } from '../../store/context';
 
 interface AccountModalProps {
   isOpenModal: boolean;
@@ -46,6 +48,8 @@ export const AccountModal = ({
   color = '#1677FF',
 }: AccountModalProps) => {
   const [form] = Form.useForm();
+  const { accounts, setAccounts } = useContext(Context);
+  console.log('accounts', accounts);
 
   const onValid = () => {
     const formData = form.getFieldsValue() as AccountFormData;
@@ -56,12 +60,25 @@ export const AccountModal = ({
     };
 
     if (id) {
-      apiUpdateAccount(id, data).then(() => {
+      apiUpdateAccount(id, data).then((newAccount) => {
+        if (newAccount) {
+          setAccounts(
+            accounts.map((item) => {
+              if (item.id === id) {
+                return newAccount;
+              }
+              return item;
+            }),
+          );
+        }
         message.success('Account updated!');
         closeModal();
       });
     } else {
-      apiSaveNewAccount(data).then(() => {
+      apiSaveNewAccount(data).then((newAccount) => {
+        if (newAccount) {
+          setAccounts([newAccount, ...accounts]);
+        }
         message.success('Account saved!');
         closeModal();
       });
@@ -96,7 +113,20 @@ export const AccountModal = ({
           name="name"
           label="Account name"
           initialValue={name}
-          rules={[{ required: true }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please enter an account name!',
+            },
+            {
+              validator: async (_, value) => {
+                const isNameUnique = accounts.every((account) => account.name !== value);
+                if (!isNameUnique) {
+                  throw new Error('Account name must be unique!');
+                }
+              },
+            },
+          ]}
         >
           <Input placeholder="Name" />
         </Form.Item>

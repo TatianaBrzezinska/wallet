@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import { initializeAPI } from './api';
 import { App } from './components';
 

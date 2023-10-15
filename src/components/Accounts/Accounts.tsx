@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Spin } from 'antd';
 
+import { Context } from '../../store/context';
 import { apiGetAccounts } from '../../api';
-import { AccountsAPI } from '../../types';
 import { AccountItem, AccountsHeader } from '../index';
 
 import './Accounts.css';
 
 export const Accounts = () => {
+  const { accounts, setAccounts } = useContext(Context);
   const [isLoading, setLoader] = useState(false);
-  const [accounts, setAccounts] = useState<AccountsAPI[]>([]);
 
   useEffect(() => {
     setLoader(true);
     apiGetAccounts()
       .then(setAccounts)
       .finally(() => setLoader(false));
+    // eslint-disable-next-line
   }, []);
 
   if (isLoading) {

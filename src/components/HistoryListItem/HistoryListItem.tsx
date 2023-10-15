@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Typography, List, Avatar, Dropdown, Button, Modal } from 'antd';
 import { EllipsisOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { HistoryModal } from '../index';
 import { apiDeleteTransaction } from '../../api';
+import { Context } from '../../store/context';
 
 import './HistoryListItem.css';
 
@@ -23,6 +24,7 @@ export const HistoryListItem = ({
   isIncome = false,
 }: HistoryListItemProps) => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const { transactions, setTransactions } = useContext(Context);
 
   const menuItems = [
     {
@@ -42,7 +44,9 @@ export const HistoryListItem = ({
           cancelText: 'Cancel',
           okText: 'Delete',
           onOk() {
-            return apiDeleteTransaction(id);
+            return apiDeleteTransaction(id).then(() => {
+              setTransactions(transactions.filter((item) => item.id !== id));
+            });
           },
           onCancel() {},
         });
@@ -62,8 +66,8 @@ export const HistoryListItem = ({
           <Dropdown menu={{ items: menuItems }}>
             <Button size="small" shape="circle" icon={<EllipsisOutlined />} />
           </Dropdown>
-          <Typography.Text type={isIncome ? 'success' : 'secondary'}>
-            {isIncome ? '+' : ''}
+          <Typography.Text type={isIncome ? 'success' : 'danger'}>
+            {isIncome ? '+' : '-'}
             {balance} $
           </Typography.Text>
         </div>

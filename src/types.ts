@@ -8,7 +8,7 @@ export interface AccountsAPI {
   created: Timestamp;
 }
 
-export type TransactionType = "income" | "expense";
+export type TransactionType = "income" | "outcome";
 
 export interface TransactionsAPI {
   id: string;
