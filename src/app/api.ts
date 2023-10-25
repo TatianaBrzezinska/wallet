@@ -4,9 +4,7 @@ import {
   collection,
   getDocs,
   query,
-  orderBy,
   addDoc,
-  Timestamp,
   getDoc,
   doc,
   updateDoc,
@@ -55,7 +53,7 @@ export const apiGetAccounts = async (): Promise<AccountsAPI[]> => {
   const result: AccountsAPI[] = [];
   const db = getFirestore();
   try {
-    const q = query(collection(db, "accounts"), orderBy("created", "desc"));
+    const q = query(collection(db, "accounts"));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -81,10 +79,7 @@ export interface AccountSaveData {
 export const apiSaveNewAccount = async (
   data: AccountSaveData
 ): Promise<AccountsAPI | null> => {
-  const newDoc: Omit<AccountsAPI, "id"> = {
-    ...data,
-    created: Timestamp.now()
-  };
+  const newDoc: Omit<AccountsAPI, "id"> = data;
   const db = getFirestore();
 
   try {
@@ -161,7 +156,7 @@ export const apiGetTransactions = async (): Promise<TransactionsAPI[]> => {
   const db = getFirestore();
 
   try {
-    const q = query(collection(db, "transactions"), orderBy("created", "desc"));
+    const q = query(collection(db, "transactions"));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -189,10 +184,7 @@ export interface TransactionSaveData {
 export const apiSaveNewTransaction = async (
   data: TransactionSaveData
 ): Promise<TransactionsAPI | null> => {
-  const newDoc: Omit<TransactionsAPI, "id"> = {
-    ...data,
-    created: Timestamp.now()
-  };
+  const newDoc: Omit<TransactionsAPI, "id"> = data;
   const db = getFirestore();
 
   try {
