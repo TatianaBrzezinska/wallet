@@ -1,0 +1,23 @@
+[debug] [2023-10-13T14:18:36.627Z] ----------------------------------------------------------------------
+[debug] [2023-10-13T14:18:36.632Z] Command:       /Users/tetianabrzezinska/.nvm/versions/node/v20.8.0/bin/node /Users/tetianabrzezinska/.nvm/versions/node/v20.8.0/bin/firebase init
+[debug] [2023-10-13T14:18:36.632Z] CLI Version:   12.7.0
+[debug] [2023-10-13T14:18:36.632Z] Platform:      darwin
+[debug] [2023-10-13T14:18:36.632Z] Node Version:  v20.8.0
+[debug] [2023-10-13T14:18:36.632Z] Time:          Fri Oct 13 2023 16:18:36 GMT+0200 (Central European Summer Time)
+[debug] [2023-10-13T14:18:36.633Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-10-13T14:18:36.638Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-13T14:18:36.638Z] > authorizing via signed-in user (tatka123321@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/tetianabrzezinska/Desktop/learning/wallet
+
+[debug] [2023-10-13T14:24:26.577Z] Error: read EIO
+    at TTY.onStreamRead (node:internal/stream_base_commons:217:20)
