@@ -1,5 +1,3 @@
-This is wallet connected with FireBase. This repo contains three branches in which the state is managed in different ways:
+# wallet
 
-- useContext (wallet-useContext)
-- redux with redux-thunk (wallet-redux)
-- reduxToolkit (wallet-reduxToolkit)
+This is a wallet connected with FireBase that uses Redux for state management
